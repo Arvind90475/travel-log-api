@@ -6,7 +6,6 @@ const DB_CONNECTION_STRING =
   process.env.NODE_ENV !== "production"
     ? "mongodb://localhost:27017/travel-log"
     : process.env.CONNECTION_STRING;
-console.log(DB_CONNECTION_STRING);
 
 const main = () => {
   mongoose
