@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
-const tryCatchWrapper = require("../../helpers");
 const User = require("../../models/user");
+const tryCatchWrapper = require("../../helpers");
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 const { Router } = require("express");
 
+const User = require("../../models/user");
 const tryCatchWrapper = require("../../helpers");
 const { login, signup, logout } = require("./auth.controller");
-const User = require("../../models/user");
 
 const { isLoggedIn } = require("../../middlewares");
 

@@ -1,5 +1,7 @@
 const { Router } = require("express");
+
 const router = Router();
+
 const LogEntry = require("../../models/logEntry");
 const tryCatchWrapper = require("../../helpers");
 const { isAdmin } = require("../../middlewares");
