@@ -10,7 +10,7 @@ router.get(
     const query =
       req.user.role === "admin" ? {} : { createdByUser: req.user.userId };
     const logEntries = await LogEntry.find(query);
-    res.json(logEntries);
+    res.status(200).json(logEntries);
   })
 );
 
@@ -31,7 +31,7 @@ router.post(
       createdByUser: req.user.userId,
     };
     const log = await LogEntry.create(logEntry);
-    res.json(log);
+    res.status(201).json(log);
   })
 );
 
