@@ -7,8 +7,8 @@ const seedAdmin = async () => {
   try {
     await mongoose.connect(process.env.CONNECTION_STRING);
     await User.create({
-      email: "arvind.bisht.90475@gmail.com",
-      password: await bcrypt.hash("secretPassword", 8),
+      email: process.env.DEFAULT_ADMIN_USER_EMAIL,
+      password: await bcrypt.hash(process.env.DEFAULT_ADMIN_USER_PASSWORD, 8),
       role: "admin",
     });
   } catch (error) {
