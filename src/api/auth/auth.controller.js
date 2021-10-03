@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../../models/user");
+const { generateToken } = require("../../helpers");
 
 module.exports.signup = async (req, res, next) => {
   const dbUser = await User.find({ email: req.body.email });
@@ -11,6 +12,12 @@ module.exports.signup = async (req, res, next) => {
   }
   req.body.password = await bcrypt.hash(req.body.password, 8);
   const newUser = await User.create(req.body);
+  const token = generateToken({ userId: newUser._id, role: newUser.role });
+  const ONE_DAY_IN_MILISECONDS = 60 * 60 * 24 * 1000;
+  res.cookie("token", token, {
+    maxAge: ONE_DAY_IN_MILISECONDS,
+    httpOnly: true,
+  });
   res.status(201).json({ id: newUser._id, email: newUser.email });
 };
 
@@ -31,13 +38,7 @@ module.exports.login = async (req, res, next) => {
     throw new Error("Unauthorized");
   }
   // everything is fine, send token along with user data
-  const token = jwt.sign(
-    { userId: dbUser._id, role: dbUser.role },
-    process.env.JWT_TOKEN_SECRET,
-    {
-      expiresIn: "1h",
-    }
-  );
+  const token = generateToken({ userId: dbUser._id, role: dbUser.role });
   const ONE_DAY_IN_MILISECONDS = 60 * 60 * 24 * 1000;
   res.cookie("token", token, {
     maxAge: ONE_DAY_IN_MILISECONDS,
