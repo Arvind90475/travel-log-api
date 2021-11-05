@@ -2,15 +2,32 @@ const { Router } = require("express");
 
 const User = require("../../models/user");
 const { tryCatchWrapper } = require("../../helpers");
-const { login, signup, logout } = require("./auth.controller");
+const {
+  login,
+  signup,
+  logout,
+  forgotPassword,
+  changePassword,
+} = require("./auth.controller");
 
 const { isLoggedIn } = require("../../middlewares");
+const {
+  validateUserBody,
+  validateForgotPasswordBody,
+} = require("../../validations/user");
 
 const router = Router();
 
-router.post("/signup", tryCatchWrapper(signup));
-router.post("/login", tryCatchWrapper(login));
-router.get("/logout", tryCatchWrapper(logout));
+router.post("/signup", validateUserBody, tryCatchWrapper(signup));
+router.post("/login", validateUserBody, tryCatchWrapper(login));
+router.get("/logout", validateUserBody, tryCatchWrapper(logout));
+router.post(
+  "/forgot-password",
+  validateForgotPasswordBody,
+  tryCatchWrapper(forgotPassword)
+);
+
+router.post("/change-password", tryCatchWrapper(changePassword));
 
 router.get("/users", isLoggedIn, async (req, res, next) => {
   const allUsers = await User.find({});
